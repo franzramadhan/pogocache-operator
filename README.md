@@ -183,15 +183,18 @@ make docker-push    # push operator container image
 
 ## Deploying the operator to a cluster
 
+The operator image is published to GHCR on every release. The simplest way to deploy is:
+
 ```sh
-# Build and push the operator image
-make docker-build docker-push IMG=your-registry/pogocache-operator:latest
+kubectl apply -f https://raw.githubusercontent.com/pogocache/pogocache/main/operator/config/install.yaml
+```
 
-# Deploy everything (CRDs, RBAC, operator Deployment)
-make deploy IMG=your-registry/pogocache-operator:latest
+This applies the bundled manifest which already references the pre-built image at `ghcr.io/pogocache/pogocache-operator:<version>`.
 
-# Or apply the bundled manifest directly
-kubectl apply -f config/install.yaml
+To deploy a specific release version:
+
+```sh
+kubectl apply -f https://github.com/pogocache/pogocache/releases/download/v1.0.0/install.yaml
 ```
 
 The operator runs in the `pogocache-system` namespace.

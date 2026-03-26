@@ -18,7 +18,7 @@ env:
 
 jobs:
   # ------------------------------------------------------------------
-  # 1. Build & push the multi-arch operator image to Docker Hub
+  # 1. Build & push the multi-arch operator image to GHCR
   # ------------------------------------------------------------------
   docker:
     name: Build & push operator image
@@ -33,11 +33,10 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: operator/go.mod
-          cache-dependency-path: operator/go.sum
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
 
       - name: go vet
-        working-directory: operator
         run: go vet ./...
 
       - name: Set up QEMU (cross-platform builds)
@@ -66,8 +65,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: operator
-          file: operator/Dockerfile
+          context: .
+          file: Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -96,16 +95,16 @@ jobs:
           VERSION: ${{ needs.docker.outputs.version }}
         run: |
           sed -i "s|image: ${{ env.OPERATOR_IMAGE }}:.*|image: ${{ env.OPERATOR_IMAGE }}:${VERSION}|" \
-            operator/config/manager/manager.yaml
+            config/manager/manager.yaml
 
       - name: Regenerate install.yaml
         run: |
-          cat operator/config/crd/bases/cache.pogocache.io_pogocacheinstances.yaml \
-              operator/config/rbac/service_account.yaml \
-              operator/config/rbac/role.yaml \
-              operator/config/rbac/role_binding.yaml \
-              operator/config/manager/manager.yaml \
-            > operator/config/install.yaml
+          cat config/crd/bases/cache.pogocache.io_pogocacheinstances.yaml \
+              config/rbac/service_account.yaml \
+              config/rbac/role.yaml \
+              config/rbac/role_binding.yaml \
+              config/manager/manager.yaml \
+            > config/install.yaml
 
       - name: Commit updated manifests
         env:
@@ -113,7 +112,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add operator/config/manager/manager.yaml operator/config/install.yaml
+          git add config/manager/manager.yaml config/install.yaml
           # Only commit if there are actual changes (idempotent re-runs).
           git diff --cached --quiet || \
             git commit -m "chore(operator): bump manifests to ${VERSION} [skip ci]"
@@ -142,7 +141,7 @@ jobs:
             ### Install
 
             ```sh
-            kubectl apply -f https://raw.githubusercontent.com/pogocache/pogocache/main/operator/config/install.yaml
+            kubectl apply -f https://raw.githubusercontent.com/pogocache/pogocache/main/config/install.yaml
             ```
 
             Or pin to this exact release:
@@ -154,7 +153,7 @@ jobs:
             ### Operator image
 
             ```
-            pogocache/pogocache-operator:${{ github.ref_name }}
+            ghcr.io/pogocache/pogocache-operator:${{ github.ref_name }}
             ```
-          files: operator/config/install.yaml
+          files: config/install.yaml
           fail_on_unmatched_files: true
