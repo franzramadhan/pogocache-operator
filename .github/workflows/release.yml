@@ -14,7 +14,7 @@ permissions:
   packages: write   # needed to push to GHCR
 
 env:
-  OPERATOR_IMAGE: ghcr.io/pogocache/pogocache-operator
+  OPERATOR_IMAGE: ghcr.io/franzramadhan/pogocache-operator
 
 jobs:
   # ------------------------------------------------------------------
