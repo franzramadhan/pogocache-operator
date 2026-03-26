@@ -1,5 +1,10 @@
 # ---- build stage ----
-FROM golang:1.26.1-alpine AS builder
+# Always run the builder on the host platform so the Go toolchain runs natively.
+FROM --platform=$BUILDPLATFORM golang:1.26.1-alpine AS builder
+
+# TARGETOS / TARGETARCH are injected by docker buildx for the target platform.
+ARG TARGETOS
+ARG TARGETARCH
 
 # Install git so go modules can fetch VCS-based dependencies.
 RUN apk add --no-cache git ca-certificates tzdata
@@ -13,7 +18,7 @@ RUN go mod download
 # Copy the full source tree and build the static binary.
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     go build \
     -trimpath \
     -ldflags="-s -w" \
