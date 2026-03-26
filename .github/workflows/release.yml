@@ -140,20 +140,22 @@ jobs:
 
             ### Install
 
+            From latest commit in main branch:
+
             ```sh
-            kubectl apply -f https://raw.githubusercontent.com/pogocache/pogocache/main/config/install.yaml
+            kubectl apply -f https://raw.githubusercontent.com/franzramadhan/pogocache-operator/refs/heads/main/config/install.yaml
             ```
 
             Or pin to this exact release:
 
             ```sh
-            kubectl apply -f https://github.com/pogocache/pogocache/releases/download/${{ github.ref_name }}/install.yaml
+            kubectl apply -f https://raw.githubusercontent.com/franzramadhan/pogocache-operator/refs/tags/${{ github.ref_name }}/config/install.yaml
             ```
 
             ### Operator image
 
             ```
-            ghcr.io/pogocache/pogocache-operator:${{ github.ref_name }}
+            ghcr.io/franzramadhan/pogocache-operator:${{ github.ref_name }}
             ```
           files: config/install.yaml
           fail_on_unmatched_files: true
