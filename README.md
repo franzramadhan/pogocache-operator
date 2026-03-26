@@ -15,34 +15,34 @@ A Kubernetes operator for managing [Pogocache](https://pogocache.com) instances 
 Install the CRDs, RBAC, and operator Deployment in one command:
 
 ```sh
-kubectl apply -f https://raw.githubusercontent.com/pogocache/pogocache/main/operator/config/install.yaml
+kubectl apply -f https://raw.githubusercontent.com/franzramadhan/pogocache-operator/main/config/install.yaml
 ```
 
 Or from a local clone:
 
 ```sh
-kubectl apply -f operator/config/install.yaml
+kubectl apply -f config/install.yaml
 ```
 
 ### Install components separately
 
 ```sh
 # CRD only
-kubectl apply -f https://raw.githubusercontent.com/pogocache/pogocache/main/operator/config/crd/bases/cache.pogocache.io_pogocacheinstances.yaml
+kubectl apply -f https://raw.githubusercontent.com/franzramadhan/pogocache-operator/main/config/crd/bases/cache.pogocache.io_pogocacheinstances.yaml
 
 # RBAC (ServiceAccount, ClusterRole, ClusterRoleBinding)
-kubectl apply -f https://raw.githubusercontent.com/pogocache/pogocache/main/operator/config/rbac/service_account.yaml
-kubectl apply -f https://raw.githubusercontent.com/pogocache/pogocache/main/operator/config/rbac/role.yaml
-kubectl apply -f https://raw.githubusercontent.com/pogocache/pogocache/main/operator/config/rbac/role_binding.yaml
+kubectl apply -f https://raw.githubusercontent.com/franzramadhan/pogocache-operator/main/config/rbac/service_account.yaml
+kubectl apply -f https://raw.githubusercontent.com/franzramadhan/pogocache-operator/main/config/rbac/role.yaml
+kubectl apply -f https://raw.githubusercontent.com/franzramadhan/pogocache-operator/main/config/rbac/role_binding.yaml
 
 # Operator Deployment
-kubectl apply -f https://raw.githubusercontent.com/pogocache/pogocache/main/operator/config/manager/manager.yaml
+kubectl apply -f https://raw.githubusercontent.com/franzramadhan/pogocache-operator/main/config/manager/manager.yaml
 ```
 
 ### Uninstall
 
 ```sh
-kubectl delete -f https://raw.githubusercontent.com/pogocache/pogocache/main/operator/config/install.yaml
+kubectl delete -f https://raw.githubusercontent.com/franzramadhan/pogocache-operator/main/config/install.yaml
 ```
 
 ## Quick start (from source)
@@ -186,15 +186,15 @@ make docker-push    # push operator container image
 The operator image is published to GHCR on every release. The simplest way to deploy is:
 
 ```sh
-kubectl apply -f https://raw.githubusercontent.com/pogocache/pogocache/main/operator/config/install.yaml
+kubectl apply -f https://raw.githubusercontent.com/franzramadhan/pogocache-operator/main/config/install.yaml
 ```
 
-This applies the bundled manifest which already references the pre-built image at `ghcr.io/pogocache/pogocache-operator:<version>`.
+This applies the bundled manifest which already references the pre-built image at `ghcr.io/franzramadhan/pogocache-operator:<version>`.
 
 To deploy a specific release version:
 
 ```sh
-kubectl apply -f https://github.com/pogocache/pogocache/releases/download/v1.0.0/install.yaml
+kubectl apply -f https://github.com/franzramadhan/pogocache-operator/releases/download/v1.0.0/install.yaml
 ```
 
 The operator runs in the `pogocache-system` namespace.
